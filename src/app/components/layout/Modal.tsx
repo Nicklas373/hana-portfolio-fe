@@ -264,7 +264,10 @@ export function ExperienceListModal({ company = "" }: { company: string }) {
         className="-ms-2 mt-2 bg-black hover:bg-amber-800/40 hover:border-slate-600 hover:backdrop-blur-sm h-12 p-4"
         onClick={() => fetchExperienceList(company)}
       >
-        More Details <IoIosArrowDropright size={16} className="-mt-0.6" />
+        More Details
+        <span className="-mt-1">
+          <IoIosArrowDropright size={16} />
+        </span>
       </Button>
       <Modal.Backdrop variant="blur">
         <Modal.Container
