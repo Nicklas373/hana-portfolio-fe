@@ -1,7 +1,7 @@
 permissions:
   contents: read
 
-name: "HANA Portfolio [SIT]"
+name: "HANA Portfolio [PROD]"
 
 on:
   push:
@@ -38,15 +38,15 @@ jobs:
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
+          CONTAINER_NAME: HANA_PORTFOLIO_[PROD]
+          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-prod-env.yml
           IMAGE_NAME: portfolio_build_image
           STATUS: Build HANA Portfolio NPM Package
           COMMIT_SHA: ${{ github.sha }}
           COMMIT_MSG: ${{ github.event.head_commit.message }}
           COMMIT_AUTHOR: ${{ github.actor }}
           BRANCH: ${{ github.ref_name }}
-          ENV: SIT
+          ENV: PROD
         run: |
           chmod +x ./module/bash/docker-build-info.sh
             bash ./module/bash/docker-build-info.sh
@@ -58,41 +58,64 @@ jobs:
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
+          CONTAINER_NAME: HANA_PORTFOLIO_[PROD]
+          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-prod-env.yml
           IMAGE_NAME: portfolio_build_image
           STATUS: Build HANA Portfolio Docker Image
           COMMIT_SHA: ${{ github.sha }}
           COMMIT_MSG: ${{ github.event.head_commit.message }}
           COMMIT_AUTHOR: ${{ github.actor }}
           BRANCH: ${{ github.ref_name }}
-          ENV: SIT
+          ENV: PROD
         run: |
           chmod +x ./module/bash/docker-build-info.sh
             bash ./module/bash/docker-build-info.sh
 
       - name: Build HANA Portfolio Docker Image
+        env:
+          NODE_ENV: production
+          APP_NAME: hana-portfolio
+          APP_URL: portfolio.hana-ci.com
+          DB_NAME: ${{ secrets.DB_NAME}}
+          DB_HOST: ${{ secrets.DB_HOST}}
+          DB_PORT: ${{ secrets.DB_PORT}}
+          DB_USER: ${{ secrets.DB_USER}}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD}}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+          TURNSTILE_SECRET_KEY: ${{ secrets.TURNSTILE_SECRET_KEY }}
+          TURNSTILE_VERIFY_URL: ${{ secrets.TURNSTILE_VERIFY_URL }}
         run: |
           docker build \
-            -t nicklas373/hana-portfolio-services-sit:1.0.0 \
-            -f Dockerfile/Dockerfile.hana-portfolio.sit \
+            --build-arg NODE_ENV=$NODE_ENV \
+            --build-arg APP_NAME="$APP_NAME" \
+            --build-arg APP_URL=$APP_URL \
+            --build-arg DB_NAME=$DB_NAME \
+            --build-arg DB_HOST=$DB_HOST \
+            --build-arg DB_PORT=$DB_PORT \
+            --build-arg DB_USER=$DB_USER \
+            --build-arg DB_PASSWORD=$DB_PASSWORD \
+            --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY \
+            --build-arg TURNSTILE_SECRET_KEY=$TURNSTILE_SECRET_KEY \
+            --build-arg TURNSTILE_VERIFY_URL=$TURNSTILE_VERIFY_URL \
+            -t nicklas373/hana-portfolio-services-prod:1.0.0 \
+            -f Dockerfile/Dockerfile.hana-portfolio.prod \
             .
           mkdir -p portfolio_image
-          docker save -o portfolio_image/portfolio_image.tar nicklas373/hana-portfolio-services-sit:1.0.0
+          docker save -o portfolio_image/portfolio_image.tar nicklas373/hana-portfolio-services-prod:1.0.0
 
       - name: Load Docker Image Notifications
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
+          CONTAINER_NAME: HANA_PORTFOLIO_[PROD]
+          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-prod-env.yml
           IMAGE_NAME: portfolio_build_image
           STATUS: Load HANA Portfolio Docker Image
           COMMIT_SHA: ${{ github.sha }}
           COMMIT_MSG: ${{ github.event.head_commit.message }}
           COMMIT_AUTHOR: ${{ github.actor }}
           BRANCH: ${{ github.ref_name }}
-          ENV: SIT
+          ENV: PROD
         run: |
           chmod +x ./module/bash/docker-build-info.sh
           bash ./module/bash/docker-build-info.sh
@@ -104,15 +127,15 @@ jobs:
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
+          CONTAINER_NAME: HANA_PORTFOLIO_[PROD]
+          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-prod-env.yml
           IMAGE_NAME: portfolio_build_image
           STATUS: Push HANA Portfolio Docker Image
           COMMIT_SHA: ${{ github.sha }}
           COMMIT_MSG: ${{ github.event.head_commit.message }}
           COMMIT_AUTHOR: ${{ github.actor }}
           BRANCH: ${{ github.ref_name }}
-          ENV: SIT
+          ENV: PROD
         run: |
           chmod +x ./module/bash/docker-build-info.sh
           bash ./module/bash/docker-build-info.sh
@@ -124,22 +147,22 @@ jobs:
           password: ${{ secrets.DOCKER_PAT }}
 
       - name: Push Docker Image to Docker Hub
-        run: docker push nicklas373/hana-portfolio-services-sit:1.0.0
+        run: docker push nicklas373/hana-portfolio-services-prod:1.0.0
 
       - name: Status Notifications
         if: always()
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
+          CONTAINER_NAME: HANA_PORTFOLIO_[PROD]
+          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-prod-env.yml
           IMAGE_NAME: portfolio_build_image
           STATUS: "Build ${{ job.status }}"
           COMMIT_SHA: ${{ github.sha }}
           COMMIT_MSG: ${{ github.event.head_commit.message }}
           COMMIT_AUTHOR: ${{ github.actor }}
           BRANCH: ${{ github.ref_name }}
-          ENV: SIT
+          ENV: PROD
         run: |
           chmod +x ./module/bash/docker-build-info.sh
           bash ./module/bash/docker-build-info.sh

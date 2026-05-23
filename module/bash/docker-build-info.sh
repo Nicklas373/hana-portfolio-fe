@@ -18,6 +18,7 @@ COMMIT_MSG=$COMMIT_MSG
 CLEAN_COMMIT_MSG=$(echo "$COMMIT_MSG" | tr '\n' ' ')
 COMMIT_AUTHOR=$COMMIT_AUTHOR
 BRANCH=$BRANCH
+ENV=$ENV
 SHORT_SHA=$(echo $COMMIT_SHA | cut -c1-7)
 ESCAPED_COMMIT_MSG=$(escape_html "$CLEAN_COMMIT_MSG")
 ESCAPED_AUTHOR=$(escape_html "$COMMIT_AUTHOR")
@@ -48,7 +49,7 @@ function bot_message() {
 			"<b>Workflow Name :</b><code> $ESCAPED_IMAGE </code>" \
 			"<b>Workflow Detail :</b> <a href='$ESCAPED_URL'>Check here !</a>" \
 			"<b>Workflow Step :</b><code> $ESCAPED_STATUS </code>" \
-			"<b>Workflow Environment :</b><code> SIT </code>" \
+			"<b>Workflow Environment :</b><code> $ENV </code>" \
 			"<b>Workflow Start At :</b><code> ${curdate} </code>" \
 			"===================================================" \
 			"" \
