@@ -48,7 +48,7 @@ function bot_message() {
 			"<b>Workflow Name :</b><code> $ESCAPED_IMAGE </code>" \
 			"<b>Workflow Detail :</b> <a href='$ESCAPED_URL'>Check here !</a>" \
 			"<b>Workflow Step :</b><code> $ESCAPED_STATUS </code>" \
-			"<b>Workflow Environment :</b><code> Production </code>" \
+			"<b>Workflow Environment :</b><code> SIT </code>" \
 			"<b>Workflow Start At :</b><code> ${curdate} </code>" \
 			"===================================================" \
 			"" \
