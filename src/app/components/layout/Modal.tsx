@@ -32,7 +32,6 @@ export function ContactModal({
     setIsSuccess,
     setToken,
     contact,
-    token,
     isError,
     isSuccess,
     isWait,
