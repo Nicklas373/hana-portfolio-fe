@@ -15,10 +15,10 @@ export default function About() {
       <Typography className="hidden lg:block leading-relaxed font-bold text-slate-200 text-lg">
         {applicationString.applicationSectionAboutTitle}
       </Typography>
-      <Typography className="leading-relaxed text-md text-slate-400">
+      <Typography className="leading-relaxed text-md text-slate-300/90">
         {applicationString.applicationSectionAboutDescription1}
       </Typography>
-      <Typography className="leading-relaxed text-md text-slate-400">
+      <Typography className="leading-relaxed text-md text-slate-300/90">
         Currently, I&apos;m working as Application Operation Support at
         <a
           href="https://www.bfifinance.com"

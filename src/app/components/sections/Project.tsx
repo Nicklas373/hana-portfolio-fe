@@ -83,7 +83,7 @@ export default function Project() {
                           />
                         </span>
                       </Typography>
-                      <Typography className="text-sm text-slate-400 leading-relaxed mt-4">
+                      <Typography className="text-sm text-slate-300/80 leading-relaxed mt-4">
                         {project.description}
                       </Typography>
                     </div>

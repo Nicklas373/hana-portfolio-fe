@@ -52,7 +52,7 @@ export default function Experience() {
               className="grid grid-cols-1 md:grid-cols-[140px_1fr] bg-black border border-slate-800 hover:bg-slate-700/60 hover:border-slate-600 hover:backdrop-blur-sm transition-all duration-300"
             >
               <div className="p-4">
-                <p className="text-sm text-slate-500">{exp.year}</p>
+                <p className="text-sm text-slate-400">{exp.year}</p>
               </div>
               <div className="px-6 py-2 pt-0 md:pt-2">
                 <div className="space-y-4">
@@ -75,10 +75,10 @@ export default function Experience() {
                         </span>
                       </Typography>
                     </a>
-                    <Typography className="text-sm text-slate-400 leading-relaxed mt-4">
+                    <Typography className="text-sm text-slate-300/80 leading-relaxed mt-4">
                       {exp.description}
                     </Typography>
-                    <Typography className="text-sm text-slate-400 leading-relaxed">
+                    <Typography className="text-sm text-slate-300/80 leading-relaxed">
                       {exp.subdescription}
                     </Typography>
                   </div>
@@ -105,7 +105,7 @@ export default function Experience() {
         href="https://nextcloud.hana-ci.com/s/KTBpTk78ymjEBQE"
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex flex-row leading-relaxed font-bold text-slate-400 text-md transition-all duration-300 hover:translate-x-2 hover:text-black"
+        className="group flex flex-row leading-relaxed w-fit transition-all duration-300 hover:translate-x-2 hover:text-black"
       >
         <Button
           className="border border-amber-400 transition-all duration-300 hover:translate-x-2 hover:bg-amber-400 hover:border-amber-400"
