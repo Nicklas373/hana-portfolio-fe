@@ -9,6 +9,10 @@ LABEL description="Docker container for https://portfolio.hana-ci.com/dickyherla
 # Configure work directory
 WORKDIR /app
 
+# Configure Environment
+ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY
+ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
 # Configure initial package
 COPY package*.json ./
 
@@ -32,7 +36,6 @@ FROM dhi.io/node:26-alpine3.23
 
 # Configure Environment
 ENV NODE_ENV=production
-ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=https://challenges.cloudflare.com/turnstile/v0/siteverify
 
 # Configure work directory
 WORKDIR /app

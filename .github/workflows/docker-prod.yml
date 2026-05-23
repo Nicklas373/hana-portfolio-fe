@@ -74,6 +74,7 @@ jobs:
       - name: Build HANA Portfolio Docker Image
         run: |
           docker build \
+            --build-arg JWT_TTL=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} \
             -t nicklas373/hana-portfolio-services-prod:1.0.0 \
             -f Dockerfile/Dockerfile.hana-portfolio.prod \
             .
