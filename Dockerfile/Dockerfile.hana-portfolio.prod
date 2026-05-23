@@ -59,9 +59,6 @@ FROM dhi.io/node:26-alpine3.23
 # Configure work directory
 WORKDIR /app
 
-# Configure Environment
-ENV NODE_ENV=production
-
 # Copying data from builder stage
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
