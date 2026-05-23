@@ -9,9 +9,6 @@ LABEL description="Docker container for https://portfolio.hana-ci.com/dickyherla
 # Configure work directory
 WORKDIR /app
 
-# Configure Environment
-ENV NODE_ENV=SIT
-
 # Configure initial package
 COPY package*.json ./
 
@@ -32,6 +29,9 @@ FROM dhi.io/node:26-alpine3.23
 
 # Configure work directory
 WORKDIR /app
+
+# Configure Environment
+ENV NODE_ENV=development
 
 # Copying data from builder stage
 COPY --from=builder /app/.next/standalone ./

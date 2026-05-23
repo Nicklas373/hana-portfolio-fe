@@ -31,7 +31,8 @@ RUN mkdir -p /app/.next/cache
 FROM dhi.io/node:26-alpine3.23 
 
 # Configure Environment
-ENV NODE_ENV="PROD"
+ENV NODE_ENV=production
+ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=https://challenges.cloudflare.com/turnstile/v0/siteverify
 
 # Configure work directory
 WORKDIR /app
