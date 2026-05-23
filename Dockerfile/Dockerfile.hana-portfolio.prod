@@ -6,32 +6,6 @@ LABEL maintainer="Nicklas373 <herlambangdicky5@gmail.com>"
 LABEL version="1.0"
 LABEL description="Docker container for https://portfolio.hana-ci.com/dickyherlambang"
 
-# Configure app argument for passign environment
-ARG NODE_ENV
-ARG APP_NAME
-ARG APP_URL
-ARG DB_NAME
-ARG DB_HOST
-ARG DB_PORT
-ARG DB_USER
-ARG DB_PASSWORD
-ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY
-ARG TURNSTILE_SECRET_KEY
-ARG TURNSTILE_VERIFY_URL
-
-# Configure app environment
-ENV NODE_ENV=$NODE_ENV
-ENV APP_NAME=$APP_NAME
-ENV APP_URL=$APP_URL
-ENV DB_NAME=$DB_NAME
-ENV DB_HOST=$DB_HOST
-ENV DB_PORT=$DB_PORT
-ENV DB_USER=$DB_USER
-ENV DB_PASSWORD=$DB_PASSWORD
-ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
-ENV TURNSTILE_SECRET_KEY=$TURNSTILE_SECRET_KEY
-ENV TURNSTILE_VERIFY_URL=$TURNSTILE_VERIFY_URL
-
 # Configure work directory
 WORKDIR /app
 
@@ -55,6 +29,9 @@ RUN mkdir -p /app/.next/cache
 
 # Use dhi.io/node:26-alpine3.23 as base image
 FROM dhi.io/node:26-alpine3.23 
+
+# Configure Environment
+ENV NODE_ENV="PROD"
 
 # Configure work directory
 WORKDIR /app
