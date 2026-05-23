@@ -92,7 +92,7 @@ jobs:
           bash ./module/bash/docker-build-info.sh
 
       - name: Load Docker Images
-        run: docker load -i api_image/api_image.tar
+        run: docker load -i portfolio_image/portfolio_image.tar
 
       - name: Push Docker Image Notifications
         env:
