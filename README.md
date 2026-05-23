@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/logo.svg" width="300" />
+</p>
+
 # HANA Portfolio
 
 A modern and responsive my personal portfolio built with Next.js, TypeScript, HeroUI and Tailwind CSS.

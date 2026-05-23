@@ -11,6 +11,7 @@ const quicksand = Quicksand({
 export const metadata: Metadata = {
   title: applicationString.applicationTitle,
   description: applicationString.applicationOwnerDescription,
+  icons: "/assets/logo.svg",
 };
 
 export default function RootLayout({
