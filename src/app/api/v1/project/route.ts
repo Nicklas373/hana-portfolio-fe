@@ -40,7 +40,7 @@ export async function GET(request: Request) {
     } else {
       return NextResponse.json(
         {
-          success: true,
+          success: false,
           message: applicationErrString.applicationErrFetchData + " project",
           data: {
             project: [],
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
           error: responseBody.error,
         },
         {
-          status: 200,
+          status: 400,
           headers: { "Content-Type": "application/json" },
         },
       );

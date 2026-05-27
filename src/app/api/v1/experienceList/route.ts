@@ -46,7 +46,7 @@ export async function GET(request: Request) {
     if (responseBody.success) {
       return NextResponse.json(
         {
-          success: true,
+          success: false,
           message: "OK",
           data: {
             experienceList: responseBody.data.experienceList,
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
           error: null,
         },
         {
-          status: 200,
+          status: 400,
           headers: { "Content-Type": "application/json" },
         },
       );
