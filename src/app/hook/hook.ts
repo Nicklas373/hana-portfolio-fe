@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import {
-  contactInsertMap,
-  experienceListMap,
-  experienceMap,
-  projectMap,
-} from "../variables/interface";
-import {
   applicationApiEndpoint,
   applicationApiVersion,
   applicationErrString,
   applicationValString,
 } from "../variables/enum";
 import { errorFormatter } from "../lib/helper";
+import { contactInsertMap } from "../variables/interface/contact";
+import {
+  experienceListMap,
+  experienceMap,
+} from "../variables/interface/experience";
+import { projectMap } from "../variables/interface/project";
 
 export function useInsertContactHooks() {
   const [contact, setContact] = useState<contactInsertMap[]>([]);

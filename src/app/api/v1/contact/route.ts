@@ -1,28 +1,61 @@
 import { emailFormatter, errorFormatter } from "@/app/lib/helper";
-import { getContact, insertContact } from "@/app/lib/model/portfolio";
 import {
+  applicationApiEndpoint,
+  applicationApiVersion,
   applicationErrString,
   applicationValString,
 } from "@/app/variables/enum";
+import {
+  contactInsertResponseMap,
+  contactResponseMap,
+} from "@/app/variables/interface/contact";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    const contactData = await getContact();
-    return NextResponse.json(
+    const response = await fetch(
+      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       {
-        success: true,
-        message: "OK",
-        data: {
-          contact: contactData,
+        method: "GET",
+        headers: {
+          Authorization: `x-hana-key ${process.env.APP_API_KEY}`,
+          "Content-Type": "application/json",
         },
-        error: null,
-      },
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
       },
     );
+
+    const responseBody: contactResponseMap = await response.json();
+    if (responseBody.success) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: "OK",
+          data: {
+            contact: responseBody.data.contact,
+          },
+          error: null,
+        },
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          message: applicationErrString.applicationErrFetchData + " contact",
+          data: {
+            contact: [],
+          },
+          error: responseBody.error,
+        },
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
   } catch (error) {
     return NextResponse.json(
       {
@@ -100,53 +133,52 @@ export async function POST(request: Request) {
     );
   }
 
-  // Validate cloudflare token
-  const verifyResponse = await fetch(`${process.env.TURNSTILE_VERIFY_URL}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      secret: process.env.TURNSTILE_SECRET_KEY!,
-      response: turnstileToken,
-    }),
-  });
-
-  const verifyData = await verifyResponse.json();
-  if (!verifyData.success) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: applicationValString.applicationValTokenFail,
-        data: {
-          contact: [],
-        },
-        error: null,
-      },
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-  }
-
   try {
-    // insert contact data
-    const contactData = await insertContact(fullname, email, message);
-    return NextResponse.json(
+    const response = await fetch(
+      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       {
-        success: true,
-        message: "OK",
-        data: {
-          contact: contactData,
+        method: "POST",
+        headers: {
+          Authorization: `x-hana-key ${process.env.APP_API_KEY}`,
+          "Content-Type": "application/json",
         },
-        error: null,
-      },
-      {
-        status: 201,
-        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       },
     );
+
+    const responseBody: contactInsertResponseMap = await response.json();
+
+    if (responseBody.success) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: "OK",
+          data: {
+            contact: responseBody.data.contact,
+          },
+          error: null,
+        },
+        {
+          status: 201,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          message: applicationErrString.applicationErrSubmitData + " contact",
+          data: {
+            contact: [],
+          },
+          error: responseBody.error,
+        },
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
   } catch (error) {
     return NextResponse.json(
       {

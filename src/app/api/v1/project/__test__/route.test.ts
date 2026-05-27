@@ -1,18 +1,20 @@
-import { projectMap } from "@/app/variables/interface";
 import { GET } from "../route";
-import { getProject } from "@/app/lib/model/portfolio";
 import { projects } from "@/app/variables/constant";
 import {
   applicationApiEndpoint,
   applicationApiVersion,
   applicationErrString,
 } from "@/app/variables/enum";
+import { projectResponseMap } from "@/app/variables/interface/project";
 
-jest.mock("@/app/lib/model/portfolio", () => ({
-  getProject: jest.fn(),
-}));
-
-const mockProjectData: projectMap[] = projects;
+const mockProjectData = {
+  success: true,
+  message: "OK",
+  data: {
+    project: projects,
+  },
+  error: null,
+};
 
 describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`, () => {
   afterEach(() => {
@@ -20,13 +22,19 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects
   });
 
   it("Mock API Get Project Data", async () => {
-    (getProject as jest.Mock).mockResolvedValue(mockProjectData);
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockProjectData),
+      } as Response),
+    );
+
     const response = await GET(
       new Request(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
       ),
     );
-    const body = await response.json();
+    const body: projectResponseMap = await response.json();
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
     expect(body.data.project).toHaveLength(1);
@@ -40,15 +48,18 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects
     });
   });
   it("Mock API error response", async () => {
-    (getProject as jest.Mock).mockRejectedValue(
-      new Error(applicationErrString.applicationErrFetchData + " project"),
+    global.fetch = jest.fn(() =>
+      Promise.reject(
+        new Error(applicationErrString.applicationErrFetchData + " project"),
+      ),
     );
+
     const response = await GET(
       new Request(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
       ),
     );
-    const body = await response.json();
+    const body: projectResponseMap = await response.json();
     expect(response.status).toBe(500);
     expect(body.success).toBe(false);
   });

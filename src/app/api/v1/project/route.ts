@@ -1,25 +1,58 @@
 import { errorFormatter } from "@/app/lib/helper";
-import { getProject } from "@/app/lib/model/portfolio";
-import { applicationErrString } from "@/app/variables/enum";
+import {
+  applicationApiEndpoint,
+  applicationApiVersion,
+  applicationErrString,
+} from "@/app/variables/enum";
+import { projectResponseMap } from "@/app/variables/interface/project";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    const projectData = await getProject();
-    return NextResponse.json(
+    const response = await fetch(
+      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
       {
-        success: true,
-        message: "OK",
-        data: {
-          project: projectData,
+        method: "GET",
+        headers: {
+          Authorization: `x-hana-key ${process.env.APP_API_KEY}`,
+          "Content-Type": "application/json",
         },
-        error: null,
-      },
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
       },
     );
+
+    const responseBody: projectResponseMap = await response.json();
+
+    if (responseBody.success) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: "OK",
+          data: {
+            project: responseBody.data.project,
+          },
+          error: null,
+        },
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: true,
+          message: applicationErrString.applicationErrFetchData + " project",
+          data: {
+            project: [],
+          },
+          error: responseBody.error,
+        },
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
   } catch (error) {
     return NextResponse.json(
       {

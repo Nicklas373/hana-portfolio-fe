@@ -11,17 +11,17 @@ import {
 } from "../hook";
 import { experience, experienceList, projects } from "@/app/variables/constant";
 import {
-  contactMap,
-  experienceListMap,
-  experienceMap,
-  projectMap,
-} from "@/app/variables/interface";
-import {
   applicationApiEndpoint,
   applicationApiVersion,
   applicationErrString,
   applicationValString,
 } from "@/app/variables/enum";
+import { contactMap } from "@/app/variables/interface/contact";
+import {
+  experienceListMap,
+  experienceMap,
+} from "@/app/variables/interface/experience";
+import { projectMap } from "@/app/variables/interface/project";
 
 const mockContactData: contactMap[] = [
   {

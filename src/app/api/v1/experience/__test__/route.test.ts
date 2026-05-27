@@ -1,17 +1,20 @@
-import { experienceMap } from "@/app/variables/interface";
 import { GET } from "../route";
-import { getExperience } from "@/app/lib/model/portfolio";
 import { experience } from "@/app/variables/constant";
 import {
   applicationApiEndpoint,
   applicationApiVersion,
+  applicationErrString,
 } from "@/app/variables/enum";
+import { experienceResponseMap } from "@/app/variables/interface/experience";
 
-jest.mock("@/app/lib/model/portfolio", () => ({
-  getExperience: jest.fn(),
-}));
-
-const mockExperienceData: experienceMap[] = experience;
+const mockExperienceData = {
+  success: true,
+  message: "OK",
+  data: {
+    experience: experience,
+  },
+  error: null,
+};
 
 describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`, () => {
   afterEach(() => {
@@ -19,13 +22,18 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
   });
 
   it("Mock API Get Experience Data", async () => {
-    (getExperience as jest.Mock).mockResolvedValue(mockExperienceData);
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockExperienceData),
+      } as Response),
+    );
     const response = await GET(
       new Request(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
       ),
     );
-    const body = await response.json();
+    const body: experienceResponseMap = await response.json();
     expect(response.status).toBe(200);
     expect(body.success).toBe(true);
     expect(body.data.experience).toHaveLength(1);
@@ -40,15 +48,17 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
     });
   });
   it("Mock API error response", async () => {
-    (getExperience as jest.Mock).mockRejectedValue(
-      new Error("Failed to fetch experience data"),
+    global.fetch = jest.fn(() =>
+      Promise.reject(
+        new Error(applicationErrString.applicationErrFetchData + " experience"),
+      ),
     );
     const response = await GET(
       new Request(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
       ),
     );
-    const body = await response.json();
+    const body: experienceResponseMap = await response.json();
     expect(response.status).toBe(500);
     expect(body.success).toBe(false);
   });

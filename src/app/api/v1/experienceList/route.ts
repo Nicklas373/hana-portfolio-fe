@@ -1,9 +1,11 @@
 import { errorFormatter } from "@/app/lib/helper";
-import { getExperienceList } from "@/app/lib/model/portfolio";
 import {
+  applicationApiEndpoint,
+  applicationApiVersion,
   applicationErrString,
   applicationValString,
 } from "@/app/variables/enum";
+import { experienceListResponseMap } from "@/app/variables/interface/experience";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -28,21 +30,51 @@ export async function GET(request: Request) {
 
   try {
     // get list of experience list data
-    const experienceListData = await getExperienceList(company);
-    return NextResponse.json(
+    const response = await fetch(
+      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experienceList}?company=${company}`,
       {
-        success: true,
-        message: "OK",
-        data: {
-          experienceList: experienceListData,
+        method: "GET",
+        headers: {
+          Authorization: `x-hana-key ${process.env.APP_API_KEY}`,
+          "Content-Type": "application/json",
         },
-        error: null,
-      },
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
       },
     );
+
+    const responseBody: experienceListResponseMap = await response.json();
+
+    if (responseBody.success) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: "OK",
+          data: {
+            experienceList: responseBody.data.experienceList,
+          },
+          error: null,
+        },
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: true,
+          message:
+            applicationErrString.applicationErrFetchData + " experience list",
+          data: {
+            experience: [],
+          },
+          error: responseBody.error,
+        },
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
   } catch (error) {
     return NextResponse.json(
       {
