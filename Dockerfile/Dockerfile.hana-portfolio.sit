@@ -3,7 +3,7 @@ FROM node:lts-alpine3.23 AS builder
 
 # Configure image maintainer
 LABEL maintainer="Nicklas373 <herlambangdicky5@gmail.com>"
-LABEL version="1.0.1"
+LABEL version="1.0.2"
 LABEL description="Docker container for https://portfolio.hana-ci.com/dickyherlambang"
 
 # Configure work directory

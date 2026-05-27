@@ -1,10 +1,10 @@
 services:
-  hana-portfolio-app-sit-services:
-    container_name: "hana-portfolio-app-sit-services"
+  hana-portfolio-fe-sit-services:
+    container_name: "hana-portfolio-fe-sit-services"
     restart: unless-stopped
     cpus: 1.0
-    mem_limit: 512M
-    mem_reservation: 256M
+    mem_limit: 256M
+    mem_reservation: 128M
     build:
       context: .
       dockerfile: Dockerfile/Dockerfile.hana-portfolio.sit
@@ -12,34 +12,8 @@ services:
       - "3000:3000"
     env_file:
       - .env.local
-    depends_on:
-      - hana-portfolio-db-sit-services
-    networks:
-      - hana-network
-  hana-portfolio-db-sit-services:
-    image: postgres:18.3
-    container_name: "hana-portfolio-db-sit-services"
-    restart: unless-stopped
-    cpus: 1.0
-    mem_limit: 256M
-    mem_reservation: 128M
-    ports:
-      - "5432:5432"
-    environment:
-      PGPASSWORD: "postgres"
-      POSTGRES_DB: "postgres"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      PGDATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - "hana-portfolio-db-sit-services:/var/lib/postgresql/data"
-      - "./module/instance/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh"
-      - "./module/db:/backup"
     networks:
       - hana-network
 networks:
   hana-network:
     name: hana-network
-volumes:
-  hana-portfolio-db-sit-services:
-    driver: local
