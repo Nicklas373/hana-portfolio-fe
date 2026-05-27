@@ -46,7 +46,7 @@ export async function GET(request: Request) {
     if (responseBody.success) {
       return NextResponse.json(
         {
-          success: false,
+          success: true,
           message: "OK",
           data: {
             experienceList: responseBody.data.experienceList,
@@ -54,14 +54,14 @@ export async function GET(request: Request) {
           error: null,
         },
         {
-          status: 400,
+          status: 200,
           headers: { "Content-Type": "application/json" },
         },
       );
     } else {
       return NextResponse.json(
         {
-          success: true,
+          success: false,
           message:
             applicationErrString.applicationErrFetchData + " experience list",
           data: {
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
           error: responseBody.error,
         },
         {
-          status: 200,
+          status: 400,
           headers: { "Content-Type": "application/json" },
         },
       );
