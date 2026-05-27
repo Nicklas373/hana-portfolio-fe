@@ -2,7 +2,7 @@
   <img src="public/logo.svg" width="300" />
 </p>
 
-# HANA Portfolio
+# HANA Portfolio [Frontend Services]
 
 A modern and responsive my personal portfolio built with Next.js, TypeScript, HeroUI and Tailwind CSS.
 
@@ -32,17 +32,34 @@ A modern and responsive my personal portfolio built with Next.js, TypeScript, He
 
 - Clone the repository:
 
+-- Frontend package (Next JS)
+
 ```bash
-git clone https://github.com/Nicklas373/hana-portfolio.git
+git clone https://github.com/Nicklas373/hana-portfolio.git hana-portfolio-fe
+```
+
+-- Backend package (Express JS)
+
+```bash
+git clone https://github.com/Nicklas373/hana-portfolio-be.git hana-portfolio-be
 ```
 
 - Move into the project directory:
 
+-- Frontend Backend
+
 ```bash
-cd hana-portfolio
+cd hana-portfolio-fe
+```
+
+-- Backend Backend
+
+```bash
+cd hana-portfolio-be
 ```
 
 - Initiate docker compose (Make sure on root directory from this project):
+  -- Applicable for frontend and backend
 
 ```bash
 docker compose up -d
@@ -57,6 +74,7 @@ docker compose up -d
 src/
  ├── app/
  ├── components/
+ ├── dickyherlambang/
  ├── hook/
  ├── lib/
  └── variables/
@@ -81,4 +99,4 @@ Feel free to connect with me:
 
 ---
 
-Built with passion using Next.js and TypeScript.
+# HANA-CI Build Project 2016 - 2026
