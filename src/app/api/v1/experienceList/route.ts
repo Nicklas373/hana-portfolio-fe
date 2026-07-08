@@ -31,7 +31,7 @@ export async function GET(request: Request) {
   try {
     // get list of experience list data
     const response = await fetch(
-      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experienceList}?company=${company}`,
+      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=${company}`,
       {
         method: "GET",
         headers: {

@@ -39,6 +39,6 @@ export enum applicationApiVersion {
 export enum applicationApiEndpoint {
   contact = "contact",
   experience = "experience",
-  experienceList = "experienceList",
+  experienceList = "list",
   projects = "project",
 }

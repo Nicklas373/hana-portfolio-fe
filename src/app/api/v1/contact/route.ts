@@ -11,6 +11,7 @@ import {
 } from "@/app/variables/interface/contact";
 import { NextResponse } from "next/server";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(request: Request) {
   try {
     const response = await fetch(

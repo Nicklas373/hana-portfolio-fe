@@ -1,4 +1,5 @@
 import { GET } from "../route";
+import dotenv from "dotenv";
 import { experienceList } from "@/app/variables/constant";
 import {
   applicationApiEndpoint,
@@ -7,6 +8,10 @@ import {
   applicationValString,
 } from "@/app/variables/enum";
 import { experienceListResponseMap } from "@/app/variables/interface/experience";
+
+// Initialize environment
+dotenv.config();
+dotenv.config({ path: `.env.local`, override: true });
 
 const mockExperienceListData = {
   success: true,
@@ -31,7 +36,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
     );
     const response = await GET(
       new Request(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experienceList}?company=PT%20BFI%20Finance%20Indonesia%20Tbk`,
+        `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=PT%20BFI%20Finance%20Indonesia%20Tbk`,
       ),
     );
     const body = await response.json();
@@ -48,7 +53,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
   it("Mock API validation response", async () => {
     const response = await GET(
       new Request(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experienceList}?company=`,
+        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=`,
       ),
     );
     const body: experienceListResponseMap = await response.json();
@@ -68,7 +73,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
 
     const response = await GET(
       new Request(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experienceList}`,
+        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}`,
       ),
     );
     const body: experienceListResponseMap = await response.json();
@@ -88,7 +93,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
 
     const response = await GET(
       new Request(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experienceList}?company=PT%20BFI%20Finance%20Indonesia%20Tbk`,
+        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=PT%20BFI%20Finance%20Indonesia%20Tbk`,
       ),
     );
     const body: experienceListResponseMap = await response.json();

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import {
   applicationApiEndpoint,
@@ -5,7 +6,7 @@ import {
   applicationErrString,
   applicationValString,
 } from "../variables/enum";
-import { errorFormatter } from "../lib/helper";
+import { baseUrlBuilder } from "../lib/helper";
 import { contactInsertMap } from "../variables/interface/contact";
 import {
   experienceListMap,
@@ -37,7 +38,7 @@ export function useInsertContactHooks() {
 
     try {
       setIsWait(true);
-      const response = await fetch(
+      const response = await baseUrlBuilder(
         `/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
         {
           method: "POST",
@@ -73,22 +74,12 @@ export function useInsertContactHooks() {
         setError(applicationErrString.applicationErrSubmitData);
         setIsSuccess(false);
         setIsError(false);
-        console.log(
-          applicationErrString.applicationErrSubmitData +
-            ": " +
-            errorFormatter(data.error),
-        );
       }
     } catch (err) {
       setContact([]);
       setError(applicationErrString.applicationErrSubmitData);
       setIsSuccess(false);
       setIsError(false);
-      console.log(
-        applicationErrString.applicationErrSubmitData +
-          ": " +
-          errorFormatter(err),
-      );
     } finally {
       setIsWait(false);
     }
@@ -118,7 +109,7 @@ export function useExperienceHooks() {
       try {
         setIsWait(true);
 
-        const response = await fetch(
+        const response = await baseUrlBuilder(
           `/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
         );
         if (!response.ok) {
@@ -136,20 +127,10 @@ export function useExperienceHooks() {
         } else {
           setExperience([]);
           setError(applicationErrString.applicationErrFetchData);
-          console.log(
-            applicationErrString.applicationErrFetchData +
-              ": " +
-              errorFormatter(data.error),
-          );
         }
       } catch (err) {
         setExperience([]);
         setError(applicationErrString.applicationErrFetchData);
-        console.log(
-          applicationErrString.applicationErrFetchData +
-            ": " +
-            errorFormatter(err),
-        );
       } finally {
         setIsWait(false);
       }
@@ -180,8 +161,8 @@ export function useExperienceListHooks() {
 
     try {
       setIsWait(true);
-      const response = await fetch(
-        `/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experienceList}?company=${company}`,
+      const response = await baseUrlBuilder(
+        `/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=${company}`,
       );
       if (!response.ok) {
         setExperienceList([]);
@@ -196,20 +177,10 @@ export function useExperienceListHooks() {
       } else {
         setExperienceList([]);
         setError(applicationErrString.applicationErrFetchData);
-        console.log(
-          applicationErrString.applicationErrFetchData +
-            ": " +
-            errorFormatter(data.error),
-        );
       }
     } catch (err) {
       setExperienceList([]);
       setError(applicationErrString.applicationErrFetchData);
-      console.log(
-        applicationErrString.applicationErrFetchData +
-          ": " +
-          errorFormatter(err),
-      );
     } finally {
       setIsWait(false);
     }
@@ -232,7 +203,7 @@ export function useProjectHooks() {
     const fetchProjects = async () => {
       try {
         setIsWait(true);
-        const response = await fetch(
+        const response = await baseUrlBuilder(
           `/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
         );
         if (!response.ok) {
@@ -249,20 +220,10 @@ export function useProjectHooks() {
         } else {
           setProjects([]);
           setError(applicationErrString.applicationErrFetchData);
-          console.log(
-            applicationErrString.applicationErrFetchData +
-              ": " +
-              errorFormatter(data.error),
-          );
         }
       } catch (err) {
         setProjects([]);
         setError(applicationErrString.applicationErrFetchData);
-        console.log(
-          applicationErrString.applicationErrFetchData +
-            ": " +
-            errorFormatter(err),
-        );
       } finally {
         setIsWait(false);
       }

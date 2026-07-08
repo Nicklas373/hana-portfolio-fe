@@ -8,6 +8,7 @@ import { ProjectSkeleton } from "../layout/Skeleton";
 import { applicationErrString, applicationString } from "@/app/variables/enum";
 import { Typography } from "@heroui/react/typography";
 import { Button } from "@heroui/react";
+import { basePath } from "@/app/variables/constant";
 
 export default function Project() {
   const { projects, isWait, error } = useProjectHooks();
@@ -57,7 +58,7 @@ export default function Project() {
                 <div className="p-4 mx-auto">
                   {project.icons ? (
                     <Image
-                      src={project.icons}
+                      src={`${basePath}${project.icons}`}
                       width={100}
                       height={100}
                       alt={project.name}

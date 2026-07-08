@@ -1,7 +1,7 @@
 "use client";
 
 import { useActiveSection } from "@/app/hook/activeSection";
-import { navItems, sidebarNavItems } from "@/app/variables/constant";
+import { basePath, navItems, sidebarNavItems } from "@/app/variables/constant";
 import { ContactModal } from "./Modal";
 import { applicationString } from "@/app/variables/enum";
 import Image from "next/image";
@@ -17,7 +17,7 @@ export default function Sidebar() {
       <div>
         <div className="flex flex-col gap-4">
           <Image
-            src={"/assets/icon.png"}
+            src={`${basePath}/assets/icon.png`}
             width={64}
             height={64}
             alt="Logo"

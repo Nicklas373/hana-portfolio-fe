@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-
 import { act, renderHook, waitFor } from "@testing-library/react";
 import {
   useExperienceHooks,
@@ -9,7 +8,12 @@ import {
   useInsertContactHooks,
   useProjectHooks,
 } from "../hook";
-import { experience, experienceList, projects } from "@/app/variables/constant";
+import {
+  basePath,
+  experience,
+  experienceList,
+  projects,
+} from "@/app/variables/constant";
 import {
   applicationApiEndpoint,
   applicationApiVersion,
@@ -74,7 +78,7 @@ describe("Mock useInsertContactHooks", () => {
     expect(result.current.error).toBe("");
     expect(result.current.contact).toEqual(mockContactInsertPayload);
     expect(global.fetch).toHaveBeenCalledWith(
-      `/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
+      `${basePath}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       {
         method: "POST",
         headers: {

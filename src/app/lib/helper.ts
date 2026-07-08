@@ -1,3 +1,4 @@
+import { basePath } from "../variables/constant";
 import { applicationErrString } from "../variables/enum";
 
 export function emailFormatter(email: string): boolean {
@@ -24,3 +25,17 @@ export function errorFormatter(err: unknown): string {
     return applicationErrString.applicationErrFailParseMsg;
   }
 }
+
+export const baseUrlBuilder = (requestUrl: string, options?: RequestInit) => {
+  const uri = requestUrl.startsWith("/") ? requestUrl : `/${requestUrl}`;
+
+  return fetch(`${basePath}${uri}`, {
+    ...options,
+  });
+};
+
+export const baseUrlBuilderTest = (requestUrl: string) => {
+  const uri = requestUrl.startsWith("/") ? requestUrl : `/${requestUrl}`;
+
+  return `${process.env.APP_URL}/${basePath}${uri}`;
+};
