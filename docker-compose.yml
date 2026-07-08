@@ -1,10 +1,49 @@
 services:
+  hana-traefik-services:
+    image: traefik:latest
+    container_name: hana-traefik-services
+    restart: on-failure
+    ports:
+      - "80:80"
+    command:
+      - --log.level=INFO
+      - --api
+      - --entrypoints.web.address=:80
+      - --ping
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - hana-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.services.traefik.loadbalancer.server.port=80"
   hana-portfolio-fe-sit-services:
     container_name: "hana-portfolio-fe-sit-services"
     restart: unless-stopped
     cpus: 1.0
     mem_limit: 256M
     mem_reservation: 128M
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.lbswarm=false"
+      - "traefik.http.routers.hana-portfolio-fe.rule=Host(`portfolio-sit.localhost`)"
+      - "traefik.http.routers.hana-portfolio-fe.entrypoints=web"
+      - "traefik.http.routers.hana-portfolio-fe.middlewares=redirect-to-new-page"
+      - "traefik.http.middlewares.redirect-to-new-page.redirectregex.regex=^http://portfolio-sit\\.localhost/$"
+      - "traefik.http.middlewares.redirect-to-new-page.redirectregex.replacement=http://portfolio-sit.localhost/dickyherlambang/$1"
+      - "traefik.http.middlewares.redirect-to-new-page.redirectregex.permanent=false"
+      - "traefik.http.routers.hana-portfolio-fe.service=hana-portfolio-fe@docker"
+      - "traefik.http.services.hana-portfolio-fe.loadbalancer.server.port=3000"
     build:
       context: .
       dockerfile: Dockerfile/Dockerfile.hana-portfolio.sit
@@ -14,6 +53,7 @@ services:
       - .env.local
     networks:
       - hana-network
+
 networks:
   hana-network:
     name: hana-network
