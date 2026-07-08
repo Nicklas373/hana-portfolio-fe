@@ -51,9 +51,6 @@ jobs:
           chmod +x ./module/bash/docker-build-info.sh
             bash ./module/bash/docker-build-info.sh
 
-      - name: Build project
-        run: npm run build
-
       - name: Docker Image Build Notification
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
@@ -75,11 +72,11 @@ jobs:
         run: |
           docker build \
             --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} \
-            -t nicklas373/hana-portfolio-services-prod:1.0.3 \
+            -t nicklas373/hana-portfolio-services-prod:1.0.4 \
             -f Dockerfile/Dockerfile.hana-portfolio.prod \
             .
           mkdir -p portfolio_image
-          docker save -o portfolio_image/portfolio_image.tar nicklas373/hana-portfolio-services-prod:1.0.3
+          docker save -o portfolio_image/portfolio_image.tar nicklas373/hana-portfolio-services-prod:1.0.4
 
       - name: Load Docker Image Notifications
         env:
@@ -125,7 +122,7 @@ jobs:
           password: ${{ secrets.DOCKER_PAT }}
 
       - name: Push Docker Image to Docker Hub
-        run: docker push nicklas373/hana-portfolio-services-prod:1.0.3
+        run: docker push nicklas373/hana-portfolio-services-prod:1.0.4
 
       - name: Status Notifications
         if: always()
