@@ -66,7 +66,7 @@ docker compose up -d
 ```
 
 - Make sure to create Cloudflare Turnstile Widget first -> Look here for [documentation](https://developers.cloudflare.com/turnstile/)
-- Check on http://localhost:3000
+- Check on http://portfolio-sit.localhost
 
 ## Project Structure
 
@@ -74,7 +74,6 @@ docker compose up -d
 src/
  ├── app/
  ├── components/
- ├── dickyherlambang/
  ├── hook/
  ├── lib/
  └── variables/
