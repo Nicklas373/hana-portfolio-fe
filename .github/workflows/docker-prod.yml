@@ -71,13 +71,13 @@ jobs:
       - name: Build HANA Portfolio Docker Image
         run: |
           docker build \
-            --build-arg APP_NAME=${{ secrets.APP_NAME }} \
-            --build-arg APP_URL=${{ secrets.APP_URL }} \
-            --build-arg APP_BASE_PATH=${{ secrets.APP_BASE_PATH }} \
-            --build-arg APP_API_KEY=${{ secrets.APP_API_KEY }} \
-            --build-arg APP_API_URL=${{ secrets.APP_API_URL }} \
-            --build-arg NEXT_PUBLIC_BASE_PATH=${{ secrets.NEXT_PUBLIC_BASE_PATH }} \
-            --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }} \
+            --build-arg APP_NAME="${{ secrets.APP_NAME }}" \
+            --build-arg APP_URL="${{ secrets.APP_URL }}" \
+            --build-arg APP_BASE_PATH="${{ secrets.APP_BASE_PATH }}" \
+            --build-arg APP_API_KEY="${{ secrets.APP_API_KEY }}" \
+            --build-arg APP_API_URL="${{ secrets.APP_API_URL }}" \
+            --build-arg NEXT_PUBLIC_BASE_PATH="${{ secrets.NEXT_PUBLIC_BASE_PATH }}" \
+            --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY="${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}" \
             -t nicklas373/hana-portfolio-services-prod:1.0.4 \
             -f Dockerfile/Dockerfile.hana-portfolio.prod \
             .
