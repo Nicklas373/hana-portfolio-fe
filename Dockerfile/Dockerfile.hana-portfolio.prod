@@ -9,15 +9,6 @@ LABEL description="Docker container for https://portfolio.hana-ci.com/dickyherla
 # Configure work directory
 WORKDIR /app
 
-# Configure Environment
-ARG APP_NAME
-ARG APP_URL
-ARG APP_BASE_PATH
-ARG APP_API_KEY
-ARG APP_API_URL
-ARG NEXT_PUBLIC_BASE_PATH
-ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY
-
 # Configure initial package
 COPY package*.json ./
 
@@ -41,13 +32,6 @@ FROM node:26-alpine3.24
 
 # Configure Environment
 ENV NODE_ENV=production
-ENV APP_NAME=${APP_NAME}
-ENV APP_URL=${APP_URL}
-ENV APP_BASE_PATH=${APP_BASE_PATH}
-ENV APP_API_KEY=${APP_API_KEY}
-ENV APP_API_URL=${APP_API_URL}
-ENV NEXT_PUBLIC_BASE_PATH=${NEXT_PUBLIC_BASE_PATH}
-ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
 
 # Configure work directory
 WORKDIR /app
