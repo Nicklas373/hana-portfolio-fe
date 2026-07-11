@@ -6,11 +6,10 @@ import {
   applicationValString,
 } from "@/app/variables/enum";
 import { experienceListResponseMap } from "@/app/variables/interface/experience";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const company = searchParams.get("company");
+export async function GET(request: NextRequest) {
+  const company = request.nextUrl.searchParams.get("company");
   if (!company) {
     return NextResponse.json(
       {

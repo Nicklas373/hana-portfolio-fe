@@ -9,10 +9,10 @@ import {
   contactInsertResponseMap,
   contactResponseMap,
 } from "@/app/variables/interface/contact";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const response = await fetch(
       `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   // Define request body parameter
   const body = await request.json();
   const { fullname, email, message, turnstileToken } = body;
