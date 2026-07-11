@@ -6,6 +6,9 @@
 
 A modern and responsive my personal portfolio built with Next.js, TypeScript, HeroUI and Tailwind CSS.
 
+[![HANA Portfolio [PROD]](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-prod.yml/badge.svg)](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-prod.yml)
+[![HANA Portfolio [SIT]](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-sit.yml/badge.svg)](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-sit.yml)
+
 ### Live Preview -> [HANA Portfolio](https://portfolio.hana-ci.com/dickyherlambang)
 
 ## Features
