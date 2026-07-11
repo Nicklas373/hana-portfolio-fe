@@ -162,7 +162,7 @@ export function useExperienceListHooks() {
     try {
       setIsWait(true);
       const response = await baseUrlBuilder(
-        `/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceListFE}?company=${company}`,
+        `/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experienceListFE}?company=${company}`,
       );
       if (!response.ok) {
         setExperienceList([]);
