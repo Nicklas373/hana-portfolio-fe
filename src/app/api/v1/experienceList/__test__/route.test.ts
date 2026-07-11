@@ -8,6 +8,7 @@ import {
   applicationValString,
 } from "@/app/variables/enum";
 import { experienceListResponseMap } from "@/app/variables/interface/experience";
+import { NextRequest } from "next/server";
 
 // Initialize environment
 dotenv.config();
@@ -35,7 +36,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
       } as Response),
     );
     const response = await GET(
-      new Request(
+      new NextRequest(
         `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=PT%20BFI%20Finance%20Indonesia%20Tbk`,
       ),
     );
@@ -52,7 +53,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
   });
   it("Mock API validation response", async () => {
     const response = await GET(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=`,
       ),
     );
@@ -72,7 +73,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
     );
 
     const response = await GET(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}`,
       ),
     );
@@ -92,7 +93,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
     );
 
     const response = await GET(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=PT%20BFI%20Finance%20Indonesia%20Tbk`,
       ),
     );

@@ -10,6 +10,7 @@ import {
   applicationErrString,
   applicationValString,
 } from "@/app/variables/enum";
+import { NextRequest } from "next/server";
 
 const mockExpectedResponseData: contactMap[] = [
   {
@@ -42,7 +43,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}
       } as Response),
     );
     const response = await GET(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       ),
     );
@@ -65,7 +66,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}
       ),
     );
     const response = await GET(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       ),
     );
@@ -96,7 +97,7 @@ describe("POST /api/v1/contact", () => {
     } as Response);
 
     const response = await POST(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
         {
           method: "POST",
@@ -135,7 +136,7 @@ describe("POST /api/v1/contact", () => {
     };
 
     const response = await POST(
-      new Request(`${process.env.APP_URL}/api/v1/contact`, {
+      new NextRequest(`${process.env.APP_URL}/api/v1/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(invalidPayload),
@@ -157,7 +158,7 @@ describe("POST /api/v1/contact", () => {
       .mockRejectedValueOnce(new Error("Internal Server Error"));
 
     const response = await POST(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
         {
           method: "POST",

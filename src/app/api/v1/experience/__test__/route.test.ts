@@ -6,6 +6,7 @@ import {
   applicationErrString,
 } from "@/app/variables/enum";
 import { experienceResponseMap } from "@/app/variables/interface/experience";
+import { NextRequest } from "next/server";
 
 const mockExperienceData = {
   success: true,
@@ -29,7 +30,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
       } as Response),
     );
     const response = await GET(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
       ),
     );
@@ -54,7 +55,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
       ),
     );
     const response = await GET(
-      new Request(
+      new NextRequest(
         `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
       ),
     );
