@@ -34,7 +34,7 @@ jobs:
                 "$MINIO_SECRET_KEY"
 
               mc cp \
-                minio/hana-ci-env/portfolio-api/.env.prod \
+                minio/hana-ci-env/portfolio/.env.prod \
                 /workspace/.env
             '
 
