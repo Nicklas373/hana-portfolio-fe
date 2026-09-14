@@ -3,7 +3,7 @@ FROM node:lts-alpine3.24 AS builder
 
 # Configure image maintainer
 LABEL maintainer="Nicklas373 <herlambangdicky5@gmail.com>"
-LABEL version="1.0.4"
+LABEL version="1.0.5"
 LABEL description="Docker container for https://portfolio.hana-ci.com/dickyherlambang"
 
 # Configure work directory
@@ -17,9 +17,6 @@ RUN npm ci
 
 # Copy other data
 COPY . .
-
-# Removing environment files
-RUN rm .env.local .env.test
 
 # Compiling node packages
 RUN npm run build

@@ -16,6 +16,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Preparing env
+        env:
+          MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+        run: |
+          docker run --rm \
+            --entrypoint /bin/sh \
+            -e MINIO_ENDPOINT="$MINIO_ENDPOINT" \
+            -e MINIO_ACCESS_KEY="$MINIO_ACCESS_KEY" \
+            -e MINIO_SECRET_KEY="$MINIO_SECRET_KEY" \
+            -v "$GITHUB_WORKSPACE:/workspace" \
+            pgsty/mc:latest \
+            -c '
+              mc alias set minio \
+                "$MINIO_ENDPOINT" \
+                "$MINIO_ACCESS_KEY" \
+                "$MINIO_SECRET_KEY"
+
+              mc cp \
+                minio/hana-ci-env/portfolio-api/.env.sit \
+                /workspace/.env
+            '
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -34,29 +58,12 @@ jobs:
       - name: Run coverage
         run: npm run test:coverage
 
-      - name: NPM Build Package
-        env:
-          TG_TOKEN: ${{ secrets.TG_TOKEN }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
-          IMAGE_NAME: portfolio_build_image
-          STATUS: Build HANA Portfolio NPM Package
-          COMMIT_SHA: ${{ github.sha }}
-          COMMIT_MSG: ${{ github.event.head_commit.message }}
-          COMMIT_AUTHOR: ${{ github.actor }}
-          BRANCH: ${{ github.ref_name }}
-          ENV: SIT
-        run: |
-          chmod +x ./module/bash/docker-build-info.sh
-            bash ./module/bash/docker-build-info.sh
-
       - name: Docker Image Build Notification
         env:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
+          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-sit.yml
           IMAGE_NAME: portfolio_build_image
           STATUS: Build HANA Portfolio Docker Image
           COMMIT_SHA: ${{ github.sha }}
@@ -71,28 +78,11 @@ jobs:
       - name: Build HANA Portfolio Docker Image
         run: |
           docker build \
-            -t nicklas373/hana-portfolio-services-sit:1.0.4 \
+            -t nicklas373/hana-portfolio-services-sit:1.0.5 \
             -f Dockerfile/Dockerfile.hana-portfolio.sit \
             .
           mkdir -p portfolio_image
-          docker save -o portfolio_image/portfolio_image.tar nicklas373/hana-portfolio-services-sit:1.0.4
-
-      - name: Load Docker Image Notifications
-        env:
-          TG_TOKEN: ${{ secrets.TG_TOKEN }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
-          IMAGE_NAME: portfolio_build_image
-          STATUS: Load HANA Portfolio Docker Image
-          COMMIT_SHA: ${{ github.sha }}
-          COMMIT_MSG: ${{ github.event.head_commit.message }}
-          COMMIT_AUTHOR: ${{ github.actor }}
-          BRANCH: ${{ github.ref_name }}
-          ENV: SIT
-        run: |
-          chmod +x ./module/bash/docker-build-info.sh
-          bash ./module/bash/docker-build-info.sh
+          docker save -o portfolio_image/portfolio_image.tar nicklas373/hana-portfolio-services-sit:1.0.5
 
       - name: Load Docker Images
         run: docker load -i portfolio_image/portfolio_image.tar
@@ -102,7 +92,7 @@ jobs:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
+          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-sit.yml
           IMAGE_NAME: portfolio_build_image
           STATUS: Push HANA Portfolio Docker Image
           COMMIT_SHA: ${{ github.sha }}
@@ -121,7 +111,7 @@ jobs:
           password: ${{ secrets.DOCKER_PAT }}
 
       - name: Push Docker Image to Docker Hub
-        run: docker push nicklas373/hana-portfolio-services-sit:1.0.4
+        run: docker push nicklas373/hana-portfolio-services-sit:1.0.5
 
       - name: Status Notifications
         if: always()
@@ -129,7 +119,7 @@ jobs:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           CONTAINER_NAME: HANA_PORTFOLIO_[SIT]
-          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio/actions/workflows/docker-sit-env.yml
+          WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-sit.yml
           IMAGE_NAME: portfolio_build_image
           STATUS: "Build ${{ job.status }}"
           COMMIT_SHA: ${{ github.sha }}

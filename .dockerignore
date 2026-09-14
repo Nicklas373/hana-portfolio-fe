@@ -1,0 +1,10 @@
+.github
+.env.test
+.next
+.swc
+.vscode
+coverage
+Dockerfile
+module
+node_modules
+README.md
