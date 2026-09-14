@@ -1,4 +1,6 @@
+import { serverConfig } from "@/app/lib/config/server";
 import { errorFormatter } from "@/app/lib/helper";
+import { logger } from "@/app/lib/logger";
 import {
   applicationApiEndpoint,
   applicationApiVersion,
@@ -8,14 +10,14 @@ import { projectResponseMap } from "@/app/variables/interface/project";
 import { NextRequest, NextResponse } from "next/server";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function GET(request: NextRequest) {
+export async function getProjectData(request: NextRequest) {
   try {
     const response = await fetch(
-      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
+      `${serverConfig.api.apiUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
       {
         method: "GET",
         headers: {
-          Authorization: `x-hana-key ${process.env.APP_API_KEY}`,
+          Authorization: `x-hana-key ${serverConfig.api.apiKey}`,
           "Content-Type": "application/json",
         },
       },
@@ -71,3 +73,5 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export const GET = logger(getProjectData);

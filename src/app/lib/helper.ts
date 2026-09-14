@@ -1,5 +1,6 @@
 import { basePath } from "../variables/constant";
 import { applicationErrString } from "../variables/enum";
+import { clientConfig } from "./config/client";
 
 export function emailFormatter(email: string): boolean {
   if (!email) return false;
@@ -37,5 +38,5 @@ export const baseUrlBuilder = (requestUrl: string, options?: RequestInit) => {
 export const baseUrlBuilderTest = (requestUrl: string) => {
   const uri = requestUrl.startsWith("/") ? requestUrl : `/${requestUrl}`;
 
-  return `${process.env.APP_URL}/${basePath}${uri}`;
+  return `${clientConfig.app.url}/${basePath}${uri}`;
 };

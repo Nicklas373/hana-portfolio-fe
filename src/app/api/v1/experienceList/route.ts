@@ -1,4 +1,7 @@
+import { serverConfig } from "@/app/lib/config/server";
 import { errorFormatter } from "@/app/lib/helper";
+import { logger } from "@/app/lib/logger";
+import { charWithDigitSchema } from "@/app/lib/zod/schema";
 import {
   applicationApiEndpoint,
   applicationApiVersion,
@@ -8,8 +11,9 @@ import {
 import { experienceListResponseMap } from "@/app/variables/interface/experience";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function getExperienceListData(request: NextRequest) {
   const company = request.nextUrl.searchParams.get("company");
+
   if (!company) {
     return NextResponse.json(
       {
@@ -27,14 +31,31 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  if (charWithDigitSchema(50).safeParse(company).success === false) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: applicationValString.applicationValTooLong,
+        data: {
+          experienceList: null,
+        },
+        error: null,
+      },
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+  }
+
   try {
     // get list of experience list data
     const response = await fetch(
-      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=${company}`,
+      `${serverConfig.api.apiUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}/${applicationApiEndpoint.experienceList}?company=${company}`,
       {
         method: "GET",
         headers: {
-          Authorization: `x-hana-key ${process.env.APP_API_KEY}`,
+          Authorization: `x-hana-key ${serverConfig.api.apiKey}`,
           "Content-Type": "application/json",
         },
       },
@@ -92,3 +113,5 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export const GET = logger(getExperienceListData);

@@ -7,6 +7,7 @@ import {
 } from "@/app/variables/enum";
 import { projectResponseMap } from "@/app/variables/interface/project";
 import { NextRequest } from "next/server";
+import { serverConfig } from "@/app/lib/config/server";
 
 const mockProjectData = {
   success: true,
@@ -32,7 +33,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects
 
     const response = await GET(
       new NextRequest(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
+        `${serverConfig.api.apiTestUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
       ),
     );
     const body: projectResponseMap = await response.json();
@@ -57,7 +58,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects
 
     const response = await GET(
       new NextRequest(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
+        `${serverConfig.api.apiTestUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.projects}`,
       ),
     );
     const body: projectResponseMap = await response.json();

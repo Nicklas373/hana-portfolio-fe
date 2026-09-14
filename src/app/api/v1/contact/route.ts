@@ -1,4 +1,7 @@
+import { serverConfig } from "@/app/lib/config/server";
 import { emailFormatter, errorFormatter } from "@/app/lib/helper";
+import { logger } from "@/app/lib/logger";
+import { charWithDigitSchema } from "@/app/lib/zod/schema";
 import {
   applicationApiEndpoint,
   applicationApiVersion,
@@ -10,16 +13,17 @@ import {
   contactResponseMap,
 } from "@/app/variables/interface/contact";
 import { NextRequest, NextResponse } from "next/server";
+import * as z from "zod";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function GET(request: NextRequest) {
+export async function getContactData(request: NextRequest) {
   try {
     const response = await fetch(
-      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
+      `${serverConfig.api.apiUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       {
         method: "GET",
         headers: {
-          Authorization: `x-hana-key ${process.env.APP_API_KEY}`,
+          Authorization: `x-hana-key ${serverConfig.api.apiKey}`,
           "Content-Type": "application/json",
         },
       },
@@ -75,7 +79,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function postContactData(request: NextRequest) {
   // Define request body parameter
   const body = await request.json();
   const { fullname, email, message, turnstileToken } = body;
@@ -98,8 +102,26 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Validate fullname
+  if (charWithDigitSchema(50).safeParse(fullname).success === false) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: applicationValString.applicationValNameInvalid,
+        data: {
+          contact: null,
+        },
+        error: null,
+      },
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+  }
+
   // Validate email format
-  if (!emailFormatter(email)) {
+  if (z.email().safeParse(email).success === false) {
     return NextResponse.json(
       {
         success: false,
@@ -117,7 +139,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Validate maximum message characters
-  if (message.length > 500) {
+  if (charWithDigitSchema(500).safeParse(message).success === false) {
     return NextResponse.json(
       {
         success: false,
@@ -136,11 +158,11 @@ export async function POST(request: NextRequest) {
 
   try {
     const response = await fetch(
-      `${process.env.APP_API_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
+      `${serverConfig.api.apiUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       {
         method: "POST",
         headers: {
-          Authorization: `x-hana-key ${process.env.APP_API_KEY}`,
+          Authorization: `x-hana-key ${serverConfig.api.apiKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
@@ -197,3 +219,6 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export const GET = logger(getContactData);
+export const POST = logger(postContactData);

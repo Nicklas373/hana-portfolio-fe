@@ -18,6 +18,7 @@ import { CiCircleCheck } from "react-icons/ci";
 import { useRef } from "react";
 import { MdErrorOutline } from "react-icons/md";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { clientConfig } from "@/app/lib/config/client";
 
 export function ContactModal({
   isOpen,
@@ -131,7 +132,7 @@ export function ContactModal({
                     <FieldError />
                   </TextField>
                   <Turnstile
-                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                    siteKey={clientConfig.app.cfSiteKey!}
                     onSuccess={(token) => {
                       setToken(token);
                     }}

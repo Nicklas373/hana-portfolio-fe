@@ -1,7 +1,7 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { SiGmail, SiHuggingface } from "react-icons/si";
 
-export const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
+export const basePath = process.env.NEXT_PUBLIC_APP_BASE_PATH;
 
 export const experience = [
   {

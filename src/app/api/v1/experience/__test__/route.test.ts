@@ -7,6 +7,7 @@ import {
 } from "@/app/variables/enum";
 import { experienceResponseMap } from "@/app/variables/interface/experience";
 import { NextRequest } from "next/server";
+import { serverConfig } from "@/app/lib/config/server";
 
 const mockExperienceData = {
   success: true,
@@ -31,7 +32,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
     );
     const response = await GET(
       new NextRequest(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
+        `${serverConfig.api.apiTestUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
       ),
     );
     const body: experienceResponseMap = await response.json();
@@ -56,7 +57,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.experien
     );
     const response = await GET(
       new NextRequest(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
+        `${serverConfig.api.apiTestUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.experience}`,
       ),
     );
     const body: experienceResponseMap = await response.json();

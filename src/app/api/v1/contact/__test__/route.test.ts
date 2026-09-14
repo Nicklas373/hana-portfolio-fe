@@ -11,6 +11,7 @@ import {
   applicationValString,
 } from "@/app/variables/enum";
 import { NextRequest } from "next/server";
+import { serverConfig } from "@/app/lib/config/server";
 
 const mockExpectedResponseData: contactMap[] = [
   {
@@ -44,7 +45,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}
     );
     const response = await GET(
       new NextRequest(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
+        `${serverConfig.api.apiTestUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       ),
     );
     const body: contactResponseMap = await response.json();
@@ -67,7 +68,7 @@ describe(`GET /api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}
     );
     const response = await GET(
       new NextRequest(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
+        `${serverConfig.api.apiTestUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
       ),
     );
     const body: contactResponseMap = await response.json();
@@ -98,7 +99,7 @@ describe("POST /api/v1/contact", () => {
 
     const response = await POST(
       new NextRequest(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
+        `${serverConfig.api.apiTestUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
         {
           method: "POST",
           headers: {
@@ -136,7 +137,7 @@ describe("POST /api/v1/contact", () => {
     };
 
     const response = await POST(
-      new NextRequest(`${process.env.APP_URL}/api/v1/contact`, {
+      new NextRequest(`${serverConfig.api.apiTestUrl}/api/v1/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(invalidPayload),
@@ -159,7 +160,7 @@ describe("POST /api/v1/contact", () => {
 
     const response = await POST(
       new NextRequest(
-        `${process.env.APP_URL}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
+        `${serverConfig.api.apiTestUrl}/api/${applicationApiVersion.v1}/${applicationApiEndpoint.contact}`,
         {
           method: "POST",
           headers: {

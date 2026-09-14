@@ -22,12 +22,14 @@ export enum applicationErrString {
   applicationErrFetchData = "Failed to fetch data",
   applicationErrUXTitle = "Whoops!",
   applicationErrUXSubTitle = " Something went wrong while fetching the data",
+  applicationErrUnhandledMessage = "Unexpected error caught :(",
 }
 
 export enum applicationValString {
   applicationValCompanyRequired = "Missing company name",
   applicationValEmailInvalid = "Invalid email address",
-  applicationValTooLong = "Parameter value too long",
+  applicationValNameInvalid = "Invalid full name",
+  applicationValTooLong = "Characters exceed limits",
   applicationValRequired = "Missing required value",
   applicationValTokenFail = "Token validation failed",
 }
