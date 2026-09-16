@@ -1,5 +1,5 @@
-# Use node:lts-alpine3.24 as builder image
-FROM node:lts-alpine3.24 AS builder
+# Use node:26-alpine3.24 as base image
+FROM node:26-alpine3.24 AS builder
 
 # Configure image maintainer
 LABEL maintainer="Nicklas373 <herlambangdicky5@gmail.com>"
