@@ -24,8 +24,8 @@ RUN npm run build
 # Create cache dir for Next JS
 RUN mkdir -p /app/.next/cache
 
-# Use node:26-alpine3.24 as base image
-FROM node:26-alpine3.24
+# Use dhi.io/node:26-alpine3.24 as base image
+FROM dhi.io/node:26-alpine3.24
 
 # Configure Environment
 ENV NODE_ENV=production
@@ -39,6 +39,9 @@ COPY --from=builder /app/next.config.* ./
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+
+# Configure Next JS Cache
+COPY --from=builder --chown=1000:1000 /app/.next/cache ./.next/cache
 
 # Expose port
 EXPOSE 3000
