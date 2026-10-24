@@ -1,14 +1,94 @@
+name: 'HANA Portfolio [PROD]'
+
 permissions:
   contents: read
-
-name: "HANA Portfolio [PROD]"
 
 on:
   workflow_dispatch:
 
+concurrency:
+  group: hana-portfolio-fe-prod
+  cancel-in-progress: false
+
 jobs:
-  portfolio:
+  security_check:
+    name: Snyk Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set up Snyk CLI
+        uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Snyk Code test
+        run: snyk code test --sarif-file-output=snyk-code.sarif
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Snyk Open Source test
+        run: snyk test --sarif-file-output=snyk-open-source.sarif
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Build Docker image for scanning
+        run: |
+          docker build \
+            --pull \
+            -f Dockerfile/Dockerfile.hana-portfolio.prod \
+            -t hana-portfolio-fe:snyk .
+
+      - name: Snyk Container test
+        run: |
+          snyk container test hana-portfolio-fe:snyk \
+            --file=Dockerfile/Dockerfile.hana-portfolio.prod \
+            --sarif-file-output=snyk-container.sarif
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Upload Snyk Code results
+        if: always() && hashFiles('snyk-code.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-code.sarif
+          category: snyk-code
+
+      - name: Upload Snyk Open Source results
+        if: always() && hashFiles('snyk-open-source.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-open-source.sarif
+          category: snyk-open-source
+
+      - name: Upload Snyk Container results
+        if: always() && hashFiles('snyk-container.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-container.sarif
+          category: snyk-container
+
+  build_image:
+    name: Build and Push Production Image
+    needs: security_check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -76,11 +156,11 @@ jobs:
       - name: Build HANA Portfolio Docker Image
         run: |
           docker build \
-            -t nicklas373/hana-portfolio-services-prod:1.0.5 \
+            -t nicklas373/hana-portfolio-services-prod:1.0.6 \
             -f Dockerfile/Dockerfile.hana-portfolio.prod \
             .
           mkdir -p portfolio_image
-          docker save -o portfolio_image/portfolio_image.tar nicklas373/hana-portfolio-services-prod:1.0.5
+          docker save -o portfolio_image/portfolio_image.tar nicklas373/hana-portfolio-services-prod:1.0.6
 
       - name: Load Docker Images
         run: docker load -i portfolio_image/portfolio_image.tar
@@ -109,7 +189,7 @@ jobs:
           password: ${{ secrets.DOCKER_PAT }}
 
       - name: Push Docker Image to Docker Hub
-        run: docker push nicklas373/hana-portfolio-services-prod:1.0.5
+        run: docker push nicklas373/hana-portfolio-services-prod:1.0.6
 
       - name: Status Notifications
         if: always()
@@ -119,7 +199,7 @@ jobs:
           CONTAINER_NAME: HANA_PORTFOLIO_[PROD]
           WORKFLOW_URL: https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-prod.yml
           IMAGE_NAME: portfolio_build_image
-          STATUS: "Build ${{ job.status }}"
+          STATUS: 'Build ${{ job.status }}'
           COMMIT_SHA: ${{ github.sha }}
           COMMIT_MSG: ${{ github.event.head_commit.message }}
           COMMIT_AUTHOR: ${{ github.actor }}

@@ -8,6 +8,7 @@ A modern and responsive my personal portfolio built with Next.js, TypeScript, He
 
 [![HANA Portfolio [PROD]](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-prod.yml/badge.svg)](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-prod.yml)
 [![HANA Portfolio [SIT]](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-sit.yml/badge.svg)](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/docker-sit.yml)
+[![Snyk Security](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/snyk.yml/badge.svg?branch=master)](https://github.com/Nicklas373/hana-portfolio-fe/actions/workflows/snyk.yml)
 
 ### Live Preview -> [HANA Portfolio](https://portfolio.hana-ci.com/dickyherlambang)
 
