@@ -1,5 +1,5 @@
 import { serverConfig } from "@/app/lib/config/server";
-import { emailFormatter, errorFormatter } from "@/app/lib/helper";
+import { errorFormatter } from "@/app/lib/helper";
 import { logger } from "@/app/lib/logger";
 import { charWithDigitSchema } from "@/app/lib/zod/schema";
 import {
