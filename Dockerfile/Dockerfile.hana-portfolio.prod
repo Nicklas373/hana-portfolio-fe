@@ -1,9 +1,9 @@
-# Use node:26-alpine3.24 as base image
-FROM node:26-alpine3.24 AS builder
+# Use node:26-alpine3.23 as base image
+FROM node:26-alpine3.23 AS builder
 
 # Configure image maintainer
 LABEL maintainer="Nicklas373 <herlambangdicky5@gmail.com>"
-LABEL version="1.0.7"
+LABEL version="1.0.8"
 LABEL description="Docker container for https://portfolio.hana-ci.com/dickyherlambang"
 
 # Configure work directory
@@ -24,8 +24,8 @@ RUN npm run build
 # Create cache dir for Next JS
 RUN mkdir -p /app/.next/cache
 
-# Use dhi.io/node:26-alpine3.24 as base image
-FROM dhi.io/node:26-alpine3.24
+# Use dhi.io/node:26-alpine3.23 as base image
+FROM dhi.io/node:26-alpine3.23
 
 # Configure Environment
 ENV NODE_ENV=production
