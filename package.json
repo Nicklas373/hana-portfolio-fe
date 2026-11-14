@@ -1,6 +1,6 @@
 {
   "name": "hana-portfolio-fe",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -35,7 +35,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "dotenv": "^17.4.2",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "^16.4.3",
     "globals": "^17.6.0",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
@@ -43,5 +43,13 @@
     "ts-jest": "^29.4.11",
     "typescript": "^5",
     "whatwg-fetch": "^3.6.20"
+  },
+  "overrides": {
+    "minimatch": "^11.0.1",
+    "proxy-addr": "^2.0.8",
+    "qs": "^6.16.2"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true
   }
 }
